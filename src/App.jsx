@@ -147,9 +147,9 @@ export default function App() {
     <div className="board">
       <div className="board-header">
         <div>
-          <h1 className="board-title">📌 Section 41023 — Capstone Sprint Board</h1>
+          <h1 className="board-title"> Section 41023 Capstone Sprint Board</h1>
           <p className="board-sub">
-            Microfinancial Management System w/ Fleet & Transportation Module
+            Microfinancial Management System 
             {isAdmin ? ' — edit mode' : ' — view only'}
           </p>
           {isAdmin && cards.length === 0 && (
