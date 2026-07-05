@@ -42,6 +42,24 @@ const TIMELINE = [
 
 const CARDS_COLLECTION = 'kanbanCards'
 
+const STARTER_CARDS = [
+  { title: 'Outreach sa cooperatives/microfinance (email/visit)', tag: 'client', col: 'inprogress' },
+  { title: 'Sundan follow-up sa mga na-contact na', tag: 'client', col: 'backlog' },
+  { title: 'Finalize client partnership / consent', tag: 'client', col: 'backlog' },
+  { title: 'Database schema design (Supabase/PostgreSQL)', tag: 'core', col: 'inprogress' },
+  { title: 'Supabase Auth setup (roles: admin/staff/member)', tag: 'core', col: 'backlog' },
+  { title: 'UI/UX wireframes - core modules', tag: 'core', col: 'backlog' },
+  { title: 'Loan & savings management module', tag: 'core', col: 'backlog' },
+  { title: 'ESP32 + sensor prototype testing (test vehicle)', tag: 'fleet', col: 'backlog' },
+  { title: 'Fleet module integration sa main system', tag: 'fleet', col: 'backlog' },
+  { title: 'Chapter 1: Background of the Study', tag: 'docs', col: 'inprogress' },
+  { title: 'RRL Part 1', tag: 'docs', col: 'review' },
+  { title: 'Theoretical & Conceptual Framework', tag: 'docs', col: 'backlog' },
+  { title: 'Groupings & orientation', tag: 'docs', col: 'done' },
+  { title: 'Title approval sheet submission', tag: 'docs', col: 'done' },
+  { title: 'Demo prep para sa defense', tag: 'test', col: 'backlog' },
+]
+
 export default function App() {
   const [cards, setCards] = useState([])
   const [isAdmin, setIsAdmin] = useState(false)
@@ -88,6 +106,15 @@ export default function App() {
     await signOut(auth)
   }
 
+  async function seedStarterCards() {
+    for (const c of STARTER_CARDS) {
+      await addDoc(collection(db, CARDS_COLLECTION), {
+        ...c,
+        createdAt: serverTimestamp(),
+      })
+    }
+  }
+
   async function addCard(colId) {
     if (!newTitle.trim()) return
     await addDoc(collection(db, CARDS_COLLECTION), {
@@ -120,11 +147,16 @@ export default function App() {
     <div className="board">
       <div className="board-header">
         <div>
-          <h1 className="board-title"> Section 41023 Sprint Board</h1>
+          <h1 className="board-title">📌 Section 41023 — Capstone Sprint Board</h1>
           <p className="board-sub">
-            Microfinancial Management System
+            Microfinancial Management System w/ Fleet & Transportation Module
             {isAdmin ? ' — edit mode' : ' — view only'}
           </p>
+          {isAdmin && cards.length === 0 && (
+            <button className="ghost-btn" onClick={seedStarterCards} style={{ marginLeft: 4 }}>
+              ＋ Load starter cards
+            </button>
+          )}
         </div>
         <div className="auth-corner">
           {isAdmin ? (
